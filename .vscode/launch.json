@@ -1,0 +1,57 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/WeatherForecastApi/bin/Debug/net7.0/WeatherForecastApi.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/WeatherForecastApi",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        },
+        {
+            "name": "Docker .NET Processor",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run-processor: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/WeatherForecastProcessor/WeatherForecastProcessor.csproj"
+            }
+        },
+        {
+            "name": "Docker .NET API",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run-api: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/WeatherForecastApi/WeatherForecastApi.csproj"
+            }
+        },
+        {
+            "name": "Docker .NET Admin",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run-admin: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/WeatherForecastAdmin/WeatherForecastAdmin.csproj"
+            }
+        }
+    ]
+}

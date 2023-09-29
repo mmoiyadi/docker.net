@@ -1,0 +1,152 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-api",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/WeatherForecastApi/WeatherForecastApi.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build-admin",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/WeatherForecastAdmin/WeatherForecastAdmin.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build-processor",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/WeatherForecastProcessor/WeatherForecastProcessor.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/WeatherForecastApi/WeatherForecastApi.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "--project",
+                "${workspaceFolder}/WeatherForecastApi/WeatherForecastApi.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build-processor: debug",
+            "dependsOn": [
+                "build-processor"
+            ],
+            "dockerBuild": {
+                "tag": "dockernet:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/WeatherForecastProcessor/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/WeatherForecastProcessor/WeatherForecastProcessor.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build-api: debug",
+            "dependsOn": [
+                "build-api"
+            ],
+            "dockerBuild": {
+                "tag": "dockernet:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/WeatherForecastApi/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/WeatherForecastApi/WeatherForecastApi.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build-admin: debug",
+            "dependsOn": [
+                "build-admin"
+            ],
+            "dockerBuild": {
+                "tag": "dockernet:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/WeatherForecastAdmin/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/WeatherForecastAdmin/WeatherForecastAdmin.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run-processor: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/WeatherForecastProcessor/WeatherForecastProcessor.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run-api: debug",
+            "dependsOn": [
+                "docker-build-api: debug"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/WeatherForecastApi/WeatherForecastApi.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run-admin: debug",
+            "dependsOn": [
+                "docker-build-admin: debug"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/WeatherForecastAdmin/WeatherForecastAdmin.csproj",
+                "enableDebugging": true
+            }
+        }
+    ]
+}
